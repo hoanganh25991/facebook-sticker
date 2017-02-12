@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>sticker</title>
+    <style type="text/css">
+        .sticker {
+            width: 120px;
+            height: 120px;
+            background-image: url('images/oh-yeah.png');
+            background-size: 432px 432px;
+            background-position: -12px -12px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class='sticker' id='oh-yeah'></div>
+    <script type="text/javascript">
+        let Sticker_Loop = function(sticker) {
+            const step = 144;
+            const start = -12;
+            const times = 9;
+            const loop_time = 100;
+
+            let _animate = function(sticker) {
+                setTimeout(function() {
+                    requestAnimationFrame(function() {
+                        let x = start - (sticker.loop % 3) * step;
+                        let y = start - Math.floor(sticker.loop / 3) * step;
+                        sticker.loop++;
+
+                        sticker.style.backgroundPosition = `${x}px ${y}px`;
+                    });
+
+                    //breack condition
+                    if (sticker.loop == times) {
+                        console.log('End loop');
+                        sticker.loop = 0;
+                        return;
+                    }
+
+                    _animate(sticker);
+                }, loop_time);
+            };
+
+            let _init = function(sticker) {
+                //init loop			
+                if (typeof sticker.loop == 'undefined')
+                    sticker.loop = 0;
+
+
+
+                sticker.addEventListener('mouseover', function() {
+                    console.log('hover');
+                    _animate(sticker);
+                });
+            };
+
+            return {
+                sticker,
+                init: function(){_init(this.sticker);},
+                animate: function(){_animate(this.sticker);}
+            };
+        };
+        let ohYeahSticker = document.querySelector('#oh-yeah');
+        let s = Sticker_Loop(ohYeahSticker);
+        s.init();
+    </script>
+</body>
+
+</html>
